@@ -21,6 +21,8 @@ public class ClienteService {
     public Socket connect(){  //conectar
         try { 
             this.socket = new Socket("localhost",5555);  //passando host de sorvidor socket e porta de conexao
+            this.output = new ObjectOutputStream(socket.getOutputStream()); //inicializando output
+            
         } catch (IOException ex) {
             Logger.getLogger(ClienteService.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -42,7 +42,8 @@ public class ServidorService {
             Logger.getLogger(ServidorService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
+       
     
     private class ListenerSocket implements Runnable { // implementando interface ruunable para que seje uma thread
         
@@ -73,11 +74,14 @@ public class ServidorService {
                   
                   if(action.equals(Action.CONNECT)){     //teste do tipo de mensagem enviada pelo cliente
                       
-                      connect(message, output);  //pedido de conexao
+                      boolean isConnect = connect(message, output);  //pedido de conexao
+                      if(isConnect) {
+                      mapOnlines.put(message.getName() , output); // adiciona nome do cliente na lista
+                      }
                   }
                   
                   else if(action.equals(Action.DISCONNECT)){
-                  
+                      disconnect(message, output); 
                   }     
                   else if(action.equals(Action.SEND_ONE)){
                       
@@ -98,9 +102,40 @@ public class ServidorService {
         }
        
         }    
-    private void connect(ChatMessage message, ObjectOutputStream output){ 
-        sendOne(message, output);
+    private boolean connect(ChatMessage message, ObjectOutputStream output){ 
+        if(mapOnlines.size()==0){      //primeiro cliente nome a conectar
+            message.setText("YES");   
+            sendOne(message, output);  
+            return true;  // conexao ok
+        }
+        for(Map.Entry<String, ObjectOutputStream> kv : mapOnlines.entrySet()){
+            if(kv.getKey().equals(message.getName())){  //teste para nao existir nomes iguais
+                message.setText("NO");
+                sendOne(message, output);
+                return false; // nao conecta
+            }
+            else {
+                message.setText("YES"); //se nao tiver nome igual
+                sendOne(message, output);
+                return true; // conecta
+            }
+        }
+        
+       return false; //
     }
+    
+    private void disconnect(ChatMessage message, ObjectOutputStream output){  //metodo para desconectar
+        mapOnlines.remove(message.getName()); //remove cliente ao desconectar a partir do nome
+        
+        message.setText("Desconectado");
+        
+        message.setAction(Action.SEND_ONE); //envia mensagem para todos que o usuario desconectou
+        
+        sendAll(message, output);
+        
+        System.out.println("User" + message.getName() + " sai da sala"); //mensagem no console
+    }
+    
     private void sendOne(ChatMessage message, ObjectOutputStream output){
         try {
             output.writeObject(message);
@@ -109,6 +144,8 @@ public class ServidorService {
         }
     
     }
-    
+     private void sendAll(ChatMessage message, ObjectOutputStream output) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
