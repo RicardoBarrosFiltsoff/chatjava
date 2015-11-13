@@ -10,7 +10,9 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,6 +31,8 @@ public class ServidorService {
     
         try {
             serverSocket = new ServerSocket(5555); //porta de conexao do cliente com servidor
+            
+            System.out.println("Servidor on");
             
             while(true){   //manter server socket sempre esperando nova conexao                
                
@@ -77,17 +81,19 @@ public class ServidorService {
                       boolean isConnect = connect(message, output);  //pedido de conexao
                       if(isConnect) {
                       mapOnlines.put(message.getName() , output); // adiciona nome do cliente na lista
+                      sendOnlines();
                       }
                   }
                   
                   else if(action.equals(Action.DISCONNECT)){
                       disconnect(message, output); 
+                      return;   // força saida do loop ao desconectar
                   }     
                   else if(action.equals(Action.SEND_ONE)){
-                      
+                      sendOne(message, output);
                   }
                   else if(action.equals(Action.SEND_ALL)){
-                      
+                      sendAll(message);
                   }
                   else if(action.equals(Action.USERS_ONLINE)){
                       
@@ -95,7 +101,8 @@ public class ServidorService {
                   
                 }
             } catch (IOException ex) {
-                Logger.getLogger(ServidorService.class.getName()).log(Level.SEVERE, null, ex);
+                disconnect(message, output); //excessao - disconecta caso o usuario fechar janela chat
+                System.out.println(message.getName() + " deixou o chat");
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(ServidorService.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -127,11 +134,11 @@ public class ServidorService {
     private void disconnect(ChatMessage message, ObjectOutputStream output){  //metodo para desconectar
         mapOnlines.remove(message.getName()); //remove cliente ao desconectar a partir do nome
         
-        message.setText("Desconectado");
+        message.setText("Saiu \n");
         
         message.setAction(Action.SEND_ONE); //envia mensagem para todos que o usuario desconectou
         
-        sendAll(message, output);
+        sendAll(message);
         
         System.out.println("User" + message.getName() + " sai da sala"); //mensagem no console
     }
@@ -144,8 +151,47 @@ public class ServidorService {
         }
     
     }
-     private void sendAll(ChatMessage message, ObjectOutputStream output) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+     private void sendAll(ChatMessage message) {
+      
+         for(Map.Entry<String, ObjectOutputStream> kv : mapOnlines.entrySet()) {
+             if(!kv.getKey().equals(message.getName())){     //string esta armazena no key , e o boject esta armazenado no value   
+                 //se a chave da posiçao atual do for for diferente da cliente , essa mensagem e envia pro cliente q possue essa chave, evitando enviar pra ele mesmo
+                      message.setAction(Action.SEND_ONE);
+                 try {
+                    
+                     System.out.println("user: " + message.getName());
+                     kv.getValue().writeObject(message);
+                 } catch (IOException ex) {
+                     Logger.getLogger(ServidorService.class.getName()).log(Level.SEVERE, null, ex);
+                 }
+             
+             }
+         
+         }
+         
+         
     }
-    
+      private void sendOnlines() {
+          
+                Set<String> setNames = new HashSet<String>();
+                for(Map.Entry<String, ObjectOutputStream> kv : mapOnlines.entrySet()) { 
+                    setNames.add(kv.getKey());
+                }
+                
+                ChatMessage message = new ChatMessage();
+                message.setAction(Action.USERS_ONLINE);
+                message.setSetOnlines(setNames);
+                
+                for(Map.Entry<String, ObjectOutputStream> kv : mapOnlines.entrySet()) {           
+                  
+                 try {                   
+                    
+                     kv.getValue().writeObject(message);
+                 } catch (IOException ex) {
+                     Logger.getLogger(ServidorService.class.getName()).log(Level.SEVERE, null, ex);
+                 }
+          
+          }
+          }
 }
+
