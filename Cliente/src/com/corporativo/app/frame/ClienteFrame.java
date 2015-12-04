@@ -1,19 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+ 
 package com.corporativo.app.frame;
 
 import com.corporativo.app.bean.ChatMessage;
 import com.corporativo.app.bean.ChatMessage.Action;
 import com.corporativo.app.service.ClienteService;
+import java.awt.Color;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 
 /**
  *
@@ -32,7 +32,7 @@ public class ClienteFrame extends javax.swing.JFrame {
         initComponents();
     }
 
-    private class ListenerSocket implements Runnable { 
+    private class ListenerSocket implements Runnable {
 
         private ObjectInputStream input;
 
@@ -52,15 +52,16 @@ public class ClienteFrame extends javax.swing.JFrame {
 
                     if (action.equals(Action.CONNECT)) {     //teste do tipo de mensagem enviada pelo cliente
                         connected(message);                 //chamando metodo connected
-                        
+
                     } else if (action.equals(Action.DISCONNECT)) { //teste de resposta
 
-                        disconnect(message);        //chamando metodo disconnect
+                        disconnected();        //chamando metodo disconnect
+                        socket.close();
 
                     } else if (action.equals(Action.SEND_ONE)) { //teste de resposta
 
-                        receive(message);    
-                        
+                        receive(message);
+
                     } else if (action.equals(Action.USERS_ONLINE)) { //lista de unuarios online
                         refreshOnlines(message);  //atualizar lista de usuarios onlines
 
@@ -76,7 +77,7 @@ public class ClienteFrame extends javax.swing.JFrame {
 
     }
 
-    private void connected(ChatMessage message) { 
+    private void connected(ChatMessage message) {
         if (message.getText().equals("NO")) {
             this.txtName.setText("");  //limpa nome componente na tela
             JOptionPane.showMessageDialog(this, "Conexão não realizada!\nTente Novamente com um novo nome");
@@ -92,38 +93,56 @@ public class ClienteFrame extends javax.swing.JFrame {
         this.txtAreaReceiver.setEnabled(true);
         this.btnEnviar.setEnabled(true);
         this.btnLimpar.setEnabled(true);
-        this.btnAtualizar.setEnabled(true);
+        this.listOnlines.setVisible(true); 
+ 
 
-        JOptionPane.showMessageDialog(this, "Você está conectado no chat"); //conexao realizada
-
+         JOptionPane.showMessageDialog(this, "Você está conectado no chat"); //conexao realizada
+        
+        //this.txtAreaReceiver.setForeground(Color.RED);
+        this.txtAreaReceiver.append(message.getName() + " Entrou no chat "  + "\n" );
+         //this.txtAreaReceiver.setForeground(Color.BLACK);
+         
     }
 
-    private void disconnect(ChatMessage message) {
-        try {
-            this.socket.close(); //ao clicar botao sair disconecta o socket
+    private void disconnected() {
 
-            this.btnConnectar.setEnabled(true);  //habilitando e desbilitando botoes ao desconectar
-            this.txtName.setEditable(true);
+        this.btnConnectar.setEnabled(true);  //habilitando e desbilitando botoes ao desconectar
+        this.txtName.setEditable(true);
 
-            this.btnSair.setEnabled(false);
-            this.txtAreaSend.setEnabled(false);
-            this.txtAreaReceiver.setEnabled(false);
-            this.btnEnviar.setEnabled(false);
-            this.btnLimpar.setEnabled(false);
-            this.btnAtualizar.setEnabled(false);
-            
-            JOptionPane.showMessageDialog(this, "Você saiu do chat");
+        this.btnSair.setEnabled(false);
+        this.txtAreaSend.setEnabled(false);
+        this.txtAreaReceiver.setEnabled(false);
+        this.btnEnviar.setEnabled(false);
+        this.btnLimpar.setEnabled(false);        
+        this.listOnlines.clearSelection();  //limpa o nome da lista  
+        
+        this.txtAreaReceiver.setText("");//limpa area texto ao desconectar
+        this.txtAreaSend.setText("");
+        this.listOnlines.setVisible(false);
 
-        } catch (IOException ex) {
-            Logger.getLogger(ClienteFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        JOptionPane.showMessageDialog(this, " Você saiu do chat");
+
     }
 
     private void receive(ChatMessage message) {
-        this.txtAreaReceiver.append(message.getName() + "\n");  //acumula varias mensagens que chega
+        this.txtAreaReceiver.append(message.getName() + " diz: " + message.getText() + "\n");  //acumula varias mensagens que chega
+        
     }
 
     private void refreshOnlines(ChatMessage message) {
+        
+        System.out.println(message.getSetOnlines().toString());
+        
+        Set<String> names = message.getSetOnlines();
+        
+        names.remove(message.getName()); //remove nome do cliente em sua janela
+        
+        String[] array = (String[]) names.toArray(new String[names.size()]);
+        
+        this.listOnlines.setListData(array);
+        this.listOnlines.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); //aceita unica seleçao de nomes por vez
+        this.listOnlines.setLayoutOrientation(JList.VERTICAL); //nomes apareçam um abaixo do outro
+        
 
     }
 
@@ -141,7 +160,6 @@ public class ClienteFrame extends javax.swing.JFrame {
         btnConnectar = new javax.swing.JButton();
         btnSair = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        btnAtualizar = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         listOnlines = new javax.swing.JList();
         jPanel3 = new javax.swing.JPanel();
@@ -153,8 +171,19 @@ public class ClienteFrame extends javax.swing.JFrame {
         btnLimpar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("By @RicardoBarros");
+        setBackground(new java.awt.Color(0, 0, 0));
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setFont(new java.awt.Font("Comic Sans MS", 0, 10)); // NOI18N
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Conectar"));
+        jPanel1.setBackground(new java.awt.Color(255, 255, 204));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Seu Nome"));
+
+        txtName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNameActionPerformed(evt);
+            }
+        });
 
         btnConnectar.setText("Connectar");
         btnConnectar.addActionListener(new java.awt.event.ActionListener() {
@@ -176,60 +205,43 @@ public class ClienteFrame extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
-                .addComponent(btnConnectar)
-                .addGap(18, 18, 18)
-                .addComponent(btnSair)
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnConnectar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnSair))
+                    .addComponent(txtName))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnConnectar)
-                    .addComponent(btnSair))
-                .addGap(0, 23, Short.MAX_VALUE))
+                    .addComponent(btnSair)
+                    .addComponent(btnConnectar)))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Onlines"));
 
-        btnAtualizar.setText("Atualizar");
-        btnAtualizar.setEnabled(false);
-        btnAtualizar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAtualizarActionPerformed(evt);
-            }
-        });
-
-        listOnlines.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane3.setViewportView(listOnlines);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btnAtualizar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnAtualizar))
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 377, Short.MAX_VALUE)
         );
 
+        jPanel3.setBackground(new java.awt.Color(204, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         txtAreaReceiver.setEditable(false);
@@ -263,25 +275,30 @@ public class ClienteFrame extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
-            .addComponent(jScrollPane2)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnLimpar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnEnviar)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(btnLimpar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnEnviar))
+                    .addComponent(jScrollPane1)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnEnviar)
-                    .addComponent(btnLimpar)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnLimpar)
+                    .addComponent(btnEnviar)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -291,8 +308,8 @@ public class ClienteFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -309,51 +326,84 @@ public class ClienteFrame extends javax.swing.JFrame {
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
+        jPanel1.getAccessibleContext().setAccessibleName("Conectar");
+        jPanel1.getAccessibleContext().setAccessibleDescription("");
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnConnectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConnectarActionPerformed
-        String name = txtName.getText();  
+    private void btnEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarActionPerformed
+        String text = this.txtAreaSend.getText();
+        String name = this.message.getName();   //varialvel recupera texto digitado
+        
+        this.message = new ChatMessage();   // garante que nao ha nada alem de mensagem
+        
+        if(this.listOnlines.getSelectedIndex() > -1){
+            this.message.setNameReserved((String) this.listOnlines.getSelectedValue());
+            this.message.setAction(Action.SEND_ONE); //seta envio mensagens resesvadas
+            this.listOnlines.clearSelection();  //limpa o nome da lista      
+        }
+        else{
+             this.message.setAction(Action.SEND_ALL); 
+        }
+        
+        if(!text.isEmpty()){  //teste texto vazio            
+        
+        this.message.setName(name);     // apenas guarda nome da variavel 
+        this.message.setText(text);       
+                
+        this.txtAreaReceiver.append("Voce disse: " + text + "\n"); //mostra mensagem tambem na janela do usuario que enviou
+        
+        this.service.send(this.message); //envio da mensagem
+        }
+         
+        this.txtAreaSend.setText(""); //limpa campo apos enviar mensagem
+    }//GEN-LAST:event_btnEnviarActionPerformed
 
-        if (!name.isEmpty()) {                  //teste name 
+    private void btnConnectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConnectarActionPerformed
+        String name = txtName.getText();
+
+        if (!name.isEmpty()) {                  //teste name
             this.message = new ChatMessage(); //inicializando ChatMenssage
             this.message.setAction(Action.CONNECT);
             this.message.setName(name);
 
-            if (this.socket == null) {                  //teste socket
-                this.service = new ClienteService();
-                this.socket = this.service.connect();
+            this.service = new ClienteService();
+            this.socket = this.service.connect();
 
-                try {
-                    new Thread(new ListenerSocket(this.socket)).start(); //inicia ouvinte
-                } catch (IOException ex) {
-                    Logger.getLogger(ClienteFrame.class.getName()).log(Level.SEVERE, null, ex);
-                }
+            try {
+                new Thread(new ListenerSocket(this.socket)).start(); //inicia ouvinte
+            } catch (IOException ex) {
+                Logger.getLogger(ClienteFrame.class.getName()).log(Level.SEVERE, null, ex);
+
             }
             this.service.send(message);         //enviando mensagem
         }
-
     }//GEN-LAST:event_btnConnectarActionPerformed
 
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
-        // TODO add your handling code here:
+        //this.message.setAction(Action.DISCONNECT); //setar acao mensagem disconect
+        //this.service.send(this.message); // chama metodo send e mensagem enviada servidor
+        //disconnected(); // disconecta
+        ChatMessage message = new ChatMessage();
+        message.setName(this.message.getName());
+        message.setAction(Action.DISCONNECT);
+        this.service.send(message);
+        this.listOnlines.clearSelection();  //limpa o nome da lista  
+        disconnected();
+        
     }//GEN-LAST:event_btnSairActionPerformed
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
-        // TODO add your handling code here:
+        this.txtAreaReceiver.setText(""); // limpa mensagem digitada errada antes de enviar
     }//GEN-LAST:event_btnLimparActionPerformed
 
-    private void btnEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarActionPerformed
+    private void txtNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnEnviarActionPerformed
-
-    private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnAtualizarActionPerformed
+    }//GEN-LAST:event_txtNameActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAtualizar;
     private javax.swing.JButton btnConnectar;
     private javax.swing.JButton btnEnviar;
     private javax.swing.JButton btnLimpar;
