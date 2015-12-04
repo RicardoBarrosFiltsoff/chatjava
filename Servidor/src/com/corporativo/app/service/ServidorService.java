@@ -29,6 +29,7 @@ public class ServidorService {
 
         try {
             serverSocket = new ServerSocket(5555); //porta de conexao do cliente com servidor
+<<<<<<< HEAD
 
             System.out.println("Servidor on");
 
@@ -37,6 +38,16 @@ public class ServidorService {
                 socket = serverSocket.accept();  //servidor  conecta
 
                 new Thread(new ListenerSocket(socket)).start(); //objeto socket passado para Thread
+=======
+            
+            System.out.println("Servidor on");
+            
+            while(true){   //manter server socket sempre esperando nova conexao                
+               
+             socket = serverSocket.accept();  //servidor  conecta
+            
+             new Thread(new ListenerSocket(socket)).start(); //objeto socket passado para Thread
+>>>>>>> a9f3e790f9ee9f718918f57e33202bf3287f9b88
             }
 
         } catch (IOException ex) {
@@ -67,6 +78,7 @@ public class ServidorService {
             ChatMessage message = null;
 
             try {
+<<<<<<< HEAD
                 while ((message = (ChatMessage) input.readObject()) != null) {
 
                     Action action = message.getAction();
@@ -88,6 +100,35 @@ public class ServidorService {
                         sendAll(message);
                     } 
 
+=======
+                while ((message = (ChatMessage) input.readObject())!= null){
+                    
+                  Action action = message.getAction();
+                  
+                  if(action.equals(Action.CONNECT)){     //teste do tipo de mensagem enviada pelo cliente
+                      
+                      boolean isConnect = connect(message, output);  //pedido de conexao
+                      if(isConnect) {
+                      mapOnlines.put(message.getName() , output); // adiciona nome do cliente na lista
+                      sendOnlines();
+                      }
+                  }
+                  
+                  else if(action.equals(Action.DISCONNECT)){
+                      disconnect(message, output); 
+                      return;   // força saida do loop ao desconectar
+                  }     
+                  else if(action.equals(Action.SEND_ONE)){
+                      sendOne(message, output);
+                  }
+                  else if(action.equals(Action.SEND_ALL)){
+                      sendAll(message);
+                  }
+                  else if(action.equals(Action.USERS_ONLINE)){
+                      
+                  }
+                  
+>>>>>>> a9f3e790f9ee9f718918f57e33202bf3287f9b88
                 }
             } catch (IOException ex) {
                 disconnect(message, output); //excessao - disconecta caso o usuario fechar janela chat
@@ -122,6 +163,7 @@ public class ServidorService {
 
     private void disconnect(ChatMessage message, ObjectOutputStream output) {  //metodo para desconectar
         mapOnlines.remove(message.getName()); //remove cliente ao desconectar a partir do nome
+<<<<<<< HEAD
 
         message.setText(" deixou o chat \n");
 
@@ -129,6 +171,15 @@ public class ServidorService {
 
         sendAll(message);
 
+=======
+        
+        message.setText("Saiu \n");
+        
+        message.setAction(Action.SEND_ONE); //envia mensagem para todos que o usuario desconectou
+        
+        sendAll(message);
+        
+>>>>>>> a9f3e790f9ee9f718918f57e33202bf3287f9b88
         System.out.println("User" + message.getName() + " sai da sala"); //mensagem no console
     }
 
@@ -172,6 +223,7 @@ public class ServidorService {
         }
 
     }
+<<<<<<< HEAD
 
     private void sendOnlines() {
 
@@ -194,6 +246,49 @@ public class ServidorService {
             }
 
         }
+=======
+     private void sendAll(ChatMessage message) {
+      
+         for(Map.Entry<String, ObjectOutputStream> kv : mapOnlines.entrySet()) {
+             if(!kv.getKey().equals(message.getName())){     //string esta armazena no key , e o boject esta armazenado no value   
+                 //se a chave da posiçao atual do for for diferente da cliente , essa mensagem e envia pro cliente q possue essa chave, evitando enviar pra ele mesmo
+                      message.setAction(Action.SEND_ONE);
+                 try {
+                    
+                     System.out.println("user: " + message.getName());
+                     kv.getValue().writeObject(message);
+                 } catch (IOException ex) {
+                     Logger.getLogger(ServidorService.class.getName()).log(Level.SEVERE, null, ex);
+                 }
+             
+             }
+         
+         }
+         
+         
+>>>>>>> a9f3e790f9ee9f718918f57e33202bf3287f9b88
     }
-    
+      private void sendOnlines() {
+          
+                Set<String> setNames = new HashSet<String>();
+                for(Map.Entry<String, ObjectOutputStream> kv : mapOnlines.entrySet()) { 
+                    setNames.add(kv.getKey());
+                }
+                
+                ChatMessage message = new ChatMessage();
+                message.setAction(Action.USERS_ONLINE);
+                message.setSetOnlines(setNames);
+                
+                for(Map.Entry<String, ObjectOutputStream> kv : mapOnlines.entrySet()) {           
+                  
+                 try {                   
+                    
+                     kv.getValue().writeObject(message);
+                 } catch (IOException ex) {
+                     Logger.getLogger(ServidorService.class.getName()).log(Level.SEVERE, null, ex);
+                 }
+          
+          }
+          }
 }
+

@@ -113,6 +113,7 @@ public class ClienteFrame extends javax.swing.JFrame {
         this.txtAreaSend.setEnabled(false);
         this.txtAreaReceiver.setEnabled(false);
         this.btnEnviar.setEnabled(false);
+<<<<<<< HEAD
         this.btnLimpar.setEnabled(false);        
         this.listOnlines.clearSelection();  //limpa o nome da lista  
         
@@ -121,12 +122,21 @@ public class ClienteFrame extends javax.swing.JFrame {
         this.listOnlines.setVisible(false);
 
         JOptionPane.showMessageDialog(this, " Você saiu do chat");
+=======
+        this.btnLimpar.setEnabled(false);
+        this.btnAtualizar.setEnabled(false);
+
+        JOptionPane.showMessageDialog(this, "Você saiu do chat");
+>>>>>>> a9f3e790f9ee9f718918f57e33202bf3287f9b88
 
     }
 
     private void receive(ChatMessage message) {
         this.txtAreaReceiver.append(message.getName() + " diz: " + message.getText() + "\n");  //acumula varias mensagens que chega
+<<<<<<< HEAD
         
+=======
+>>>>>>> a9f3e790f9ee9f718918f57e33202bf3287f9b88
     }
 
     private void refreshOnlines(ChatMessage message) {
@@ -205,6 +215,7 @@ public class ClienteFrame extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+<<<<<<< HEAD
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -213,6 +224,15 @@ public class ClienteFrame extends javax.swing.JFrame {
                         .addComponent(btnSair))
                     .addComponent(txtName))
                 .addContainerGap())
+=======
+                .addComponent(btnSair)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(56, 56, 56)
+                .addComponent(btnConnectar)
+                .addGap(64, 64, 64))
+>>>>>>> a9f3e790f9ee9f718918f57e33202bf3287f9b88
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -220,8 +240,16 @@ public class ClienteFrame extends javax.swing.JFrame {
                 .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+<<<<<<< HEAD
                     .addComponent(btnSair)
                     .addComponent(btnConnectar)))
+=======
+                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnConnectar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSair)
+                .addGap(0, 0, Short.MAX_VALUE))
+>>>>>>> a9f3e790f9ee9f718918f57e33202bf3287f9b88
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Onlines"));
@@ -275,6 +303,7 @@ public class ClienteFrame extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+<<<<<<< HEAD
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -287,10 +316,20 @@ public class ClienteFrame extends javax.swing.JFrame {
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+=======
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addComponent(btnLimpar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnEnviar))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING))
+>>>>>>> a9f3e790f9ee9f718918f57e33202bf3287f9b88
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
+<<<<<<< HEAD
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -299,6 +338,15 @@ public class ClienteFrame extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnLimpar)
                     .addComponent(btnEnviar)))
+=======
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnEnviar)
+                    .addComponent(btnLimpar)))
+>>>>>>> a9f3e790f9ee9f718918f57e33202bf3287f9b88
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -309,7 +357,11 @@ public class ClienteFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+<<<<<<< HEAD
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+=======
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 341, Short.MAX_VALUE))
+>>>>>>> a9f3e790f9ee9f718918f57e33202bf3287f9b88
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -382,6 +434,7 @@ public class ClienteFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnConnectarActionPerformed
 
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
+<<<<<<< HEAD
         //this.message.setAction(Action.DISCONNECT); //setar acao mensagem disconect
         //this.service.send(this.message); // chama metodo send e mensagem enviada servidor
         //disconnected(); // disconecta
@@ -392,13 +445,41 @@ public class ClienteFrame extends javax.swing.JFrame {
         this.listOnlines.clearSelection();  //limpa o nome da lista  
         disconnected();
         
+=======
+        this.message.setAction(Action.DISCONNECT); //setar acao mensagem disconect
+        this.service.send(this.message); // chama metodo send e mensagem enviada servidor
+        disconnected(); // disconecta
+>>>>>>> a9f3e790f9ee9f718918f57e33202bf3287f9b88
     }//GEN-LAST:event_btnSairActionPerformed
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
         this.txtAreaReceiver.setText(""); // limpa mensagem digitada errada antes de enviar
     }//GEN-LAST:event_btnLimparActionPerformed
 
+<<<<<<< HEAD
     private void txtNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNameActionPerformed
+=======
+    private void btnEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarActionPerformed
+        String text = this.txtAreaSend.getText();
+        String name = this.message.getName();   //varialvel recupera texto digitado
+        if(!text.isEmpty()){  //teste texto vazio
+        
+        
+        this.message = new ChatMessage();   // garante que nao ha nada alem de mensagem
+        this.message.setName(name);     // apenas guarda nome da variavel 
+        this.message.setText(text);
+        this.message.setAction(Action.SEND_ALL); 
+        
+        this.txtAreaReceiver.append("Voce disse: " + text); //mostra mensagem tambem na janela do usuario que enviou
+        
+        this.service.send(this.message); //envio da mensagem
+        }
+        
+        this.txtAreaSend.setText(""); //limpa campo apos enviar mensagem
+    }//GEN-LAST:event_btnEnviarActionPerformed
+
+    private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
+>>>>>>> a9f3e790f9ee9f718918f57e33202bf3287f9b88
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNameActionPerformed
 

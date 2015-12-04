@@ -37,7 +37,11 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="jPanel3" max="32767" attributes="0"/>
+<<<<<<< HEAD
                   <Component id="jPanel1" max="32767" attributes="0"/>
+=======
+                  <Component id="jPanel1" pref="341" max="32767" attributes="0"/>
+>>>>>>> a9f3e790f9ee9f718918f57e33202bf3287f9b88
               </Group>
               <EmptySpace max="32767" attributes="0"/>
               <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
@@ -81,6 +85,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
+<<<<<<< HEAD
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -92,6 +97,17 @@
                       <Component id="txtName" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
+=======
+              <Group type="102" alignment="0" attributes="0">
+                  <Component id="btnSair" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
+              </Group>
+              <Group type="102" alignment="1" attributes="0">
+                  <Component id="txtName" min="-2" pref="187" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
+                  <Component id="btnConnectar" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="64" max="-2" attributes="0"/>
+>>>>>>> a9f3e790f9ee9f718918f57e33202bf3287f9b88
               </Group>
           </Group>
         </DimensionLayout>
@@ -101,9 +117,18 @@
                   <Component id="txtName" min="-2" max="-2" attributes="0"/>
                   <EmptySpace pref="17" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
+<<<<<<< HEAD
                       <Component id="btnSair" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btnConnectar" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
+=======
+                      <Component id="txtName" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnConnectar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="btnSair" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+>>>>>>> a9f3e790f9ee9f718918f57e33202bf3287f9b88
               </Group>
           </Group>
         </DimensionLayout>
@@ -191,6 +216,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
+<<<<<<< HEAD
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -206,12 +232,23 @@
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
+=======
+              <Group type="102" alignment="1" attributes="0">
+                  <Component id="btnLimpar" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="btnEnviar" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <Group type="103" alignment="1" groupAlignment="1" max="-2" attributes="0">
+                  <Component id="jScrollPane2" alignment="0" pref="337" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
+>>>>>>> a9f3e790f9ee9f718918f57e33202bf3287f9b88
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
+<<<<<<< HEAD
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jScrollPane1" min="-2" pref="134" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
@@ -220,6 +257,15 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="btnLimpar" min="-2" max="-2" attributes="0"/>
                       <Component id="btnEnviar" alignment="0" min="-2" max="-2" attributes="0"/>
+=======
+                  <Component id="jScrollPane1" min="-2" pref="145" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
+                  <Component id="jScrollPane2" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="10" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="btnEnviar" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnLimpar" alignment="3" min="-2" max="-2" attributes="0"/>
+>>>>>>> a9f3e790f9ee9f718918f57e33202bf3287f9b88
                   </Group>
               </Group>
           </Group>
